@@ -7,16 +7,20 @@
       <button-icon  @click="$router.push('/gallery')" ><img src="../assets/view-list.svg"></button-icon>
     </div>
   </section>
-<!--  <my-dialog v-model:show="dialogVisible">-->
-<!--  </my-dialog>-->
+  <my-dialog v-model:show="dialogVisible" >
+    <auth-dialog/>
+  </my-dialog>
 </template>
 
 <script>
 import MyButton from "@/components/UI/MyButton";
 import ButtonIcon from "@/components/UI/ButtonIcon";
+import AuthDialog from "@/components/AuthDialog";
+import {mapState} from "vuex";
+import MyDialog from "@/components/UI/MyDialog";
 export default {
   name: "Navbar",
-  components: {ButtonIcon, MyButton},
+  components: {AuthDialog, ButtonIcon, MyButton, MyDialog},
   data() {
     return {
       dialogVisible: false,
@@ -24,9 +28,14 @@ export default {
   },
   methods: {
     showAuthDialog(){
-      this.dialogVisible = true;
-    }
-  }
+        this.dialogVisible = true;
+      }
+  },
+  computed: {
+    ...mapState({
+      isAuth: state => state.post.isAuth,
+    })
+  },
 }
 </script>
 
