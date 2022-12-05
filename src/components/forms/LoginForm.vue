@@ -96,7 +96,6 @@ export default {
         } else {
           this.isError = true;
         }
-
       } catch (e) {
         console.log(e)
         this.isError = true;

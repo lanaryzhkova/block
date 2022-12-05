@@ -1,4 +1,5 @@
 import axios from "axios";
+import {metamaskModule} from "@/store/metamaskModule";
 
 export const postModule = {
     state: () => ({
@@ -8,7 +9,12 @@ export const postModule = {
             wallet: ''
         },
         isAuth: false,
-        errorText: ''
+        errorText: '',
+        bytes: '',
+        hashImage: '',
+        hashJSON: '',
+        costNft: 0,
+        nameNFT: '',
 
     }),
     getters: {
@@ -23,6 +29,18 @@ export const postModule = {
         },
         setErrorText(state, errorText){
             state.errorText = errorText
+        },
+        setHashImage(state, hashImage){
+            state.hashImage = hashImage
+        },
+        setHashJSON(state, hashJSON){
+            state.hashJSON = hashJSON
+        },
+        setCostNft(state, costNft){
+            state.costNft = costNft
+        },
+        setNameNft(state, nameNFT){
+            state.nameNFT = nameNFT
         }
     },
     actions: {
@@ -43,7 +61,7 @@ export const postModule = {
             await axios.post('http://127.0.0.1:8000/register/', {
                 'Email': state.user.email,
                 'Password': state.user.password,
-                'Address': state.user.wallet,
+                'Address': metamaskModule.state.wallet,
             }).then(response => {
                 console.log(response)
                 state.isAuth = true;
@@ -60,6 +78,27 @@ export const postModule = {
             state.user.password = '';
             state.user.wallet = '';
 
+        },
+        async createNft({state, commit}){
+            await axios.post('http://127.0.0.1:8000/load-image/',
+                {
+                    'Bytes': state.bytes
+                }).then(response => {
+                    commit('setHashImage', response)
+                console.log(state.hashImage)
+            })
+            await axios.post('http://127.0.0.1:8000/create_nft/', {
+                'Hash': state.hashImage,
+                'Name': state.nameNFT,
+                'Address': state.user.wallet,
+                'Cost': state.costNft
+            }).then(response => {
+                console.log(response)
+
+            })
+                .catch(e => {
+                    console.log(e)
+            })
         }
     },
     namespace: true,
