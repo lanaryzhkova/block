@@ -3,7 +3,7 @@
     <h3>Вход</h3>
     <my-input class="auth__input"
               type="email"
-              v-model.trim="email.toLowerCase()"
+              v-model.trim="email"
               placeholder="Введите e-mail"
               required>
     </my-input>
