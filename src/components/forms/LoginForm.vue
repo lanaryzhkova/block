@@ -3,7 +3,7 @@
     <h3>Вход</h3>
     <my-input class="auth__input"
               type="email"
-              v-model.trim="email"
+              v-model.trim="email.toLowerCase()"
               placeholder="Введите e-mail"
               required>
     </my-input>
@@ -96,7 +96,6 @@ export default {
         } else {
           this.isError = true;
         }
-
       } catch (e) {
         console.log(e)
         this.isError = true;
