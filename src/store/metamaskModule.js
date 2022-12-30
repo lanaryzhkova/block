@@ -4,7 +4,8 @@ export const metamaskModule = {
     state: () => ({
         connected: Boolean,
         wallet: String,
-        balance: Number
+        balance: Number,
+        signer: ''
     }),
 
     getters: {
@@ -20,6 +21,9 @@ export const metamaskModule = {
         },
         setBalance (state, balance){
             state.balance = balance;
+        },
+        setSigner (state, signer){
+            state.signer = signer;
         }
     },
 
@@ -29,9 +33,9 @@ export const metamaskModule = {
                 const provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
                 let accounts = await provider.send("eth_requestAccounts", []);
                 commit('setWallet', accounts[0]);
+                commit('setSigner', provider.getSigner());
                 commit('setBalance', ethers.utils.formatEther(await provider.getBalance(state.wallet)))
                 commit('setConnected', true)
-                console.log(state.connected)
             }
             catch (e) {
                 console.log(e)

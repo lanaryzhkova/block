@@ -1,24 +1,21 @@
 import axios from "axios";
-import {metamaskModule} from "@/store/metamaskModule";
 
 export const getModule = {
     state: () => ({
-        nft: String
+        jsonNFT: '',
+        allNfts: []
     }),
-    getters: {
-
-    },
+    getters: {},
     mutations: {
-        setNft(state, nft){
-            state.nft = nft;
+        setJsonNFT(state, jsonNFT){
+            state.jsonNFT = jsonNFT;
         }
     },
     actions: {
-        async getNftByWallet({state, commit}){
-            let address = metamaskModule.state.wallet;
-            let response =  await axios.get(`http://127.0.0.1:8000/get-nfts/${{address}}`)
-            commit('setNft', response.data)
-            console.log(state.nft)
+        async getJSON({state, commit}, hash){
+            let response = await axios.get(`http://127.0.0.1:8000/get-json-file/${hash}`)
+            commit('setJsonNFT', response.data)
+            return state.jsonNFT
         }
     },
     namespace: true

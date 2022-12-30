@@ -13,7 +13,7 @@ export default {
     show:{
       type: Boolean,
       default: false
-    }
+    },
   },
   methods: {
     hideDialog(){

@@ -3,8 +3,8 @@
     <h1 class="logo" @click="$router.push('/')">Block.</h1>
     <div class="nav__btns">
       <button-icon @click="showAuthDialog"><img src="../assets/personcircle.svg"></button-icon>
-      <button-icon  @click="$router.push('/createnft')" ><img src="../assets/plus-circle.svg"></button-icon>
-      <button-icon  @click="$router.push('/gallery')" ><img src="../assets/view-list.svg"></button-icon>
+      <button-icon  v-if="isAuth" @click="$router.push('/createnft')" ><img src="../assets/plus-circle.svg"></button-icon>
+      <button-icon v-if="isAuth" @click="$router.push('/gallery')" ><img src="../assets/view-list.svg"></button-icon>
     </div>
   </section>
   <my-dialog v-model:show="dialogVisible" >
