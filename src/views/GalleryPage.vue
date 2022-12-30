@@ -1,45 +1,62 @@
 <template>
-  <div class="container">
-    <div class="header">
-      <h2>Галерея</h2>
-    </div>
-    <nft-list
-        :nfts="this.nfts"
-        @buy="buyNft">
+  <div class="container" >
+
+      <h1 class="header">Галерея</h1>
+
+    <nft-list :nfts="this.nftsJson" v-if="isAuth===true">
     </nft-list>
+    <div v-else>
+      <p>Для просмотра галереи войдите в аккаунт!</p>
+    </div>
   </div>
 </template>
 
 <script>
-import {mapState} from "vuex";
+import {mapActions, mapState} from "vuex";
 import NftList from "@/components/NftList";
-import axios from "axios";
+import {getAllNFTs} from "@/scripts/deploy";
 
 
 export default {
   name: "GalleryPage",
   components:{NftList},
+  data(){
+    return {
+      allNfts: [],
+      nftsJson: []
+    }
+  },
   methods:{
+    ...mapActions({
+      createHashImage: "createHashImage",
+      getJSON: 'getJSON'}),
+
     buyNft(nft){
       this.nfts = this.nfts.filter(n => n.title !== nft.title)
       console.log(this.nfts)
     },
-    async fetchNftByAddress(){
-
-      let response = await axios.get(`http://127.0.0.1:8000/get-nfts/${this.wallet}`)
-      this.nfts = response.data;
+    async fetchAllNft(){
+      try{
+        this.allNfts = [...await getAllNFTs()] ;
+        for (let i=0; i<this.allNfts.length; i++){
+          let response = await this.getJSON(this.allNfts[i])
+          let res2 = response.replaceAll('\'', '"')
+          this.nftsJson[i] = JSON.parse(res2);
+        }
+      }
+      catch (e) {
+        console.log(e)
+      }
     },
   },
   computed: {
     ...mapState({
       wallet: state => state.metamask.wallet,
-      acc(){
-        return (this.account[0]?.slice(0,5)+'...'+this.account[0]?.slice(38,42));
-      }
+      isAuth: state => state.post.isAuth
     }),
   },
   mounted() {
-    this.fetchNftByAddress();
+    this.fetchAllNft();
   }
 
 }
@@ -47,16 +64,13 @@ export default {
 
 <style scoped>
 .container{
-  width: 1080px;
+  width: 1280px;
   margin: 0 auto;
   padding: 8px;
 }
 
 .header{
-  height: 50px;
-  margin-top: 16px;
-  display: flex;
-  gap: 24px;
-  align-items: center;
+  margin: 15px 0;
+
 }
 </style>

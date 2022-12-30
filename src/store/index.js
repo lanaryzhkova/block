@@ -15,6 +15,6 @@ export default createStore({
   modules: {
     metamask: metamaskModule,
     get: getModule,
-    post: postModule
+    post: postModule,
   }
 })

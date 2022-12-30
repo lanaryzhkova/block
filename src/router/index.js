@@ -2,6 +2,7 @@ import { createRouter, createWebHistory} from 'vue-router'
 import ShopPage from "@/views/ShopPage.vue";
 import GalleryPage from "@/views/GalleryPage.vue";
 import CreatingPage from "@/views/CreatingPage.vue";
+import NftPage from "@/views/NftPage";
 
 const routes = [
   {
@@ -18,6 +19,11 @@ const routes = [
     path: '/createnft',
     name: 'CreatingPage',
     component: CreatingPage
+  },
+ {
+    path: '/nfts/:id',
+    name: 'NftPage',
+    component: NftPage
   },
 ]
 

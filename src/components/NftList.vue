@@ -3,8 +3,7 @@
     <card-nft
         v-for="nft in nfts"
         :nft="nft"
-        :key="nft.title"
-        @buy="$emit('buy', nft)"
+        :key="nft.NFTName"
     />
   </div>
   <h2 v-else>
@@ -19,8 +18,7 @@ export default {
   components: {CardNft},
   props: {
     nfts:{
-      type: Array,
-      required: true,
+      type: Array
     }
   }
 }
@@ -30,5 +28,7 @@ export default {
 .nft-list{
   display: flex;
   gap: 24px;
+  width: 1280px;
+  margin: 0 auto;
 }
 </style>

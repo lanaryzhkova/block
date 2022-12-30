@@ -1,5 +1,5 @@
 <template>
-  <my-button v-if="connected!==true" @click="connectMetamask">Подключить Metamask</my-button>
+  <div class="connect"><my-button  v-if="connected!==true" @click="connectMetamask">Подключить Metamask</my-button></div>
   <login-form v-if="connected===true"></login-form>
   <div v-if="connected===true" style="text-align: center">Metamask подключен!</div>
 
@@ -30,5 +30,7 @@ export default {
 </script>
 
 <style scoped>
-
+.connect{
+  margin: 5px;
+}
 </style>

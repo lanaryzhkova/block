@@ -1,5 +1,4 @@
 import axios from "axios";
-import {metamaskModule} from "@/store/metamaskModule";
 
 export const postModule = {
     state: () => ({
@@ -15,7 +14,7 @@ export const postModule = {
         hashJSON: '',
         costNft: 0,
         nameNFT: '',
-
+        isCardsLoading: false,
     }),
     getters: {
 
@@ -41,10 +40,13 @@ export const postModule = {
         },
         setNameNft(state, nameNFT){
             state.nameNFT = nameNFT
+        },
+        setBytes(state, bytes){
+            state.bytes = bytes
         }
     },
     actions: {
-        async login({state}){
+        async login({state}) {
             await axios.post('http://127.0.0.1:8000/login/', {
                 'Email': state.user.email,
                 'Password': state.user.password,
@@ -56,50 +58,38 @@ export const postModule = {
                 .catch(e => {
                     console.log(e)
                 })
-         },
-        async register({state, commit}){
+        },
+        async register({state, commit}) {
             await axios.post('http://127.0.0.1:8000/register/', {
                 'Email': state.user.email,
                 'Password': state.user.password,
-                'Address': metamaskModule.state.wallet,
+                'Address': state.user.wallet,
             }).then(response => {
                 console.log(response)
                 state.isAuth = true;
-                console.log('yes1')
             })
                 .catch(e => {
                     commit('setErrorText', 'Вы уже зарегистрированы')
                     console.log(state.errorText)
                 })
         },
-        async logOut({state,commit}){
+        async logOut({state, commit}) {
             commit('setIsAuth', false);
             state.user.email = '';
             state.user.password = '';
             state.user.wallet = '';
 
         },
-        async createNft({state, commit}){
-            await axios.post('http://127.0.0.1:8000/load-image/',
-                {
-                    'Bytes': state.bytes
-                }).then(response => {
-                    commit('setHashImage', response)
-                console.log(state.hashImage)
-            })
-            await axios.post('http://127.0.0.1:8000/create_nft/', {
-                'Hash': state.hashImage,
-                'Name': state.nameNFT,
-                'Address': state.user.wallet,
-                'Cost': state.costNft
-            }).then(response => {
-                console.log(response)
+        async createHashImage({state,commit}, dataNFT) {
+            // if (state.user !== undefined) {
+                //commit('setBytes', bytess)
+                await axios.post('http://127.0.0.1:8000/load-image/', dataNFT).then(response => {
+                    state.hashJSON = response.data
+                    console.log(state.hashJSON)
+                })
+            // }
+        },
 
-            })
-                .catch(e => {
-                    console.log(e)
-            })
-        }
     },
     namespace: true,
 }

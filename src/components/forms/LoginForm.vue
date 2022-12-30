@@ -19,7 +19,7 @@
     </my-button>
     <div class="reg__btn" @click="this.reg=true">Зарегистрироваться</div>
   </div>
-  <div v-if="this.reg===true" class="login__form">
+  <div v-if="this.reg===true && isAuth!==true" class="login__form">
     <h3>Регистрация</h3>
     <my-input class="auth__input"
               type="email"
@@ -91,8 +91,6 @@ export default {
           this.user.wallet = this.wallet;
           console.log(this.user)
           await this.login()
-          this.email = '';
-          this.password = '';
         } else {
           this.isError = true;
         }
@@ -100,6 +98,8 @@ export default {
         console.log(e)
         this.isError = true;
       }
+      this.email = '';
+      this.password = '';
     },
     changeRepeat(){
       if (this.repeatPassword === this.password) {
@@ -116,9 +116,9 @@ export default {
           this.user.wallet = this.wallet;
           console.log(this.user)
           await  this.register();
-          // this.email = '';
-          // this.password = '';
-          // this.repeatPassword = '';
+          this.email = '';
+          this.password = '';
+          this.repeatPassword = '';
         }
         else
         {
@@ -159,28 +159,11 @@ export default {
 
 .reg__btn{
   text-decoration: underline;
+  cursor: pointer;
 }
 
 .error__div{
   color: red;
 }
 
-.btn{
-  border: 1px solid black;
-  width: fit-content;
-  height: fit-content;
-  padding: 10px;
-  -webkit-transition-duration: 0.4s;
-  transition-duration: 0.4s;
-  font-weight: bold;
-  margin: 8px 0;
-  border-radius: 8px;
-}
-
-.btn:hover{
-  background-color:  #5A5959;
-  color: white;
-  font-weight: bold;
-  border-radius: 8px;
-}
 </style>
